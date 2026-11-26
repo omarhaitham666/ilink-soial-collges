@@ -1,8 +1,18 @@
-import React from 'react'
+import { Outlet } from "react-router-dom";
+import ProfileHeader from "./components/profileHeader";
+import ProfileTabs from "./components/ProfileTabs";
 
 const ProfilePage = () => {
   return (
-    <div>ProfilePage</div>
+   <>
+    <ProfileHeader />
+    <ProfileTabs />
+
+<main>
+  <Outlet />
+</main>
+
+    </>
   )
 }
 
