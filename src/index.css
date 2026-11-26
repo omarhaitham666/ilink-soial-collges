@@ -1,1 +1,26 @@
 @import "tailwindcss";
+
+html,
+body,
+#root {
+  min-height: 100%;
+  background-color: #09090f;
+}
+
+body {
+  color: #f5f3ff;
+}
+
+/* overview */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
