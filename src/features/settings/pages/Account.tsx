@@ -23,8 +23,7 @@ location:'',
 bio:'',
 }
 
-const handleSubmit = (values)=>{
-
+const handleSubmit = (values: typeof initialValues) => {
 console.log(values);
 
 
