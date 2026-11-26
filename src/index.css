@@ -24,3 +24,128 @@ body {
     transform: translateY(0);
   }
 }
+
+/*     suggesion page       */
+
+@keyframes suggestionFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate3d(0, -10px, 0) rotate(3deg);
+  }
+}
+
+@keyframes suggestionFloatReverse {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+
+  50% {
+    transform: translate3d(8px, -7px, 0) rotate(-5deg);
+  }
+}
+
+@keyframes suggestionSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes suggestionSpinReverse {
+  from {
+    transform: rotate(360deg);
+  }
+
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes suggestionPulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.92);
+  }
+
+  50% {
+    opacity: 0.7;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes suggestionGlow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 20px rgba(168, 85, 247, 0.08),
+      0 0 45px rgba(168, 85, 247, 0.04);
+  }
+
+  50% {
+    box-shadow:
+      0 0 30px rgba(168, 85, 247, 0.18),
+      0 0 70px rgba(168, 85, 247, 0.08);
+  }
+}
+
+@keyframes suggestionShimmer {
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes suggestionOrbit {
+  0% {
+    transform: rotate(0deg) translateX(70px) rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg) translateX(70px) rotate(-360deg);
+  }
+}
+
+.suggestion-float {
+  animation: suggestionFloat 5s ease-in-out infinite;
+}
+
+.suggestion-float-reverse {
+  animation: suggestionFloatReverse 4s ease-in-out infinite;
+}
+
+.suggestion-spin {
+  animation: suggestionSpin 14s linear infinite;
+}
+
+.suggestion-spin-reverse {
+  animation: suggestionSpinReverse 18s linear infinite;
+}
+
+.suggestion-pulse {
+  animation: suggestionPulse 3s ease-in-out infinite;
+}
+
+.suggestion-glow {
+  animation: suggestionGlow 3s ease-in-out infinite;
+}
+
+.suggestion-shimmer {
+  background-size: 200% auto;
+  animation: suggestionShimmer 4s linear infinite;
+}
+
+.suggestion-orbit {
+  animation: suggestionOrbit 10s linear infinite;
+}
