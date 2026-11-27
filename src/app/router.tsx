@@ -30,7 +30,7 @@ export const router = createBrowserRouter([
     path: '/',
     element: <AppLayout />,
     children: [
-      { index: true, element: <Navigate to="/feed" replace /> },
+      { index: true, element: <Navigate to="/login" replace /> },
       { path: 'feed', element: <FeedPage /> },
       { path: 'suggestions', element: <SuggestionsPage />},
       { path: 'profile', element: <ProfilePage />  , 

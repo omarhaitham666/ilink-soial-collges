@@ -1,0 +1,120 @@
+.il-intro[open] {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  background-color: #090315;
+  background-size: 100% 100%;
+  background-position: center;
+  color: #faf2ff;
+}
+
+.il-intro::backdrop { background: transparent; }
+
+.il-intro-stage {
+  position: relative;
+  width: min(100%, 220vh);
+  aspect-ratio: 1030 / 335;
+  container-type: inline-size;
+}
+
+.il-intro-art svg { display: block; width: 100%; overflow: visible; }
+
+.il-intro .left-hand {
+  transform-origin: 100px 374px;
+  animation: ilReachLeft 1.36s cubic-bezier(.24,.47,.22,1) both;
+}
+
+.il-intro .right-hand {
+  transform-origin: 520px 110px;
+  animation: ilReachRight 1.36s cubic-bezier(.24,.47,.22,1) both;
+}
+
+.il-intro .spark { animation: ilIgnite 1.36s both; }
+
+.il-intro-tagline {
+  position: absolute;
+  top: 69.1%;
+  left: 48.4%;
+  margin: 0;
+  color: #d6c1ed;
+  font: 500 1.4cqw/1.25 Arial, sans-serif;
+  letter-spacing: .19em;
+  white-space: nowrap;
+}
+
+.il-intro-flash {
+  position: absolute;
+  left: 33.1%;
+  top: 49%;
+  width: 280vmax;
+  height: 280vmax;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(circle, #f7e5ff, #cf96ef 28%, #8145aa 52%, transparent 72%);
+  animation: ilBurst .82s 1.36s both;
+}
+
+.il-intro[open]:has(.il-intro-stage) {
+  animation: ilReveal .32s 1.88s both;
+}
+
+.il-intro-controls {
+  position: absolute;
+  right: max(20px, 4vw);
+  bottom: max(20px, env(safe-area-inset-bottom));
+  display: flex;
+  gap: 8px;
+}
+
+.il-intro-controls button,
+.il-intro-replay {
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: #d9bce8;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.il-intro-controls button { border: 1px solid #775b84; background: #1b1022; }
+.il-intro-replay { display: block; margin: 8px auto 0; background: transparent; }
+.il-intro-replay:disabled { opacity: .55; }
+
+@keyframes ilReachLeft {
+  from { transform: translate(-38px,16px) rotate(6deg); }
+  to { transform: none; }
+}
+@keyframes ilReachRight {
+  from { transform: translate(38px,-16px) rotate(7deg); }
+  to { transform: none; }
+}
+@keyframes ilIgnite { from { opacity: .08; } to { opacity: 1; } }
+@keyframes ilBurst {
+  from { transform: translate(-50%,-50%) scale(.0001); opacity: 0; }
+  12% { opacity: 1; }
+  to { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+}
+@keyframes ilReveal { from { opacity: 1; } to { opacity: 0; } }
+
+@media (max-width: 680px) {
+  .il-intro-tagline {
+    top: 84%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(10px, 2.6cqw, 14px);
+    letter-spacing: .15em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .il-intro *, .il-intro[open] { animation-duration: .01ms !important; }
+}
