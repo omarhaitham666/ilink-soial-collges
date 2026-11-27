@@ -1,0 +1,50 @@
+.shell-sidebar .shell-brand .il-sidebar-emblem {
+  display: block;
+  flex: 0 0 56px;
+  width: 56px;
+  height: 56px;
+  line-height: 0;
+}
+
+.shell-sidebar .shell-brand .il-sidebar-emblem > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .il-sidebar-emblem .left-hand {
+    transform-origin: 100px 374px;
+    animation: ilSidebarLeft 1.36s cubic-bezier(.24,.47,.22,1) both;
+  }
+
+  .il-sidebar-emblem .right-hand {
+    transform-origin: 520px 110px;
+    animation: ilSidebarRight 1.36s cubic-bezier(.24,.47,.22,1) both;
+  }
+
+  .il-sidebar-emblem .spark {
+    animation: ilSidebarSpark 1.36s both;
+    transition: filter .3s ease;
+  }
+
+  .shell-brand:is(:hover, :focus-visible) .il-sidebar-emblem .spark {
+    filter: drop-shadow(0 0 5px #dfa9ff);
+  }
+}
+
+@keyframes ilSidebarLeft {
+  from { transform: translate(-38px, 16px) rotate(6deg); }
+  to { transform: none; }
+}
+
+@keyframes ilSidebarRight {
+  from { transform: translate(38px, -16px) rotate(7deg); }
+  to { transform: none; }
+}
+
+@keyframes ilSidebarSpark {
+  from { opacity: .08; }
+  to { opacity: 1; }
+}

@@ -1,16 +1,22 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
+import Sidebar from '../components/Sidebar'
+import TopNav from '../components/TopNav'
+import MobileNav from '../components/MobileNav'
+import './app-shell.css'
 
 export default function AppLayout() {
   return (
-    <div dir="ltr" className="mx-auto w-full max-w-none px-4 py-6">
-      <nav aria-label="التنقل الرئيسي" className="mb-6 flex gap-4">
-        <NavLink to="/feed">المنشورات</NavLink>
-        <NavLink to="/suggestions">الاقتراحات</NavLink>
-      </nav>
+    <div className="app-shell" dir="ltr">
+      <Sidebar />
 
-      <main>
-        <Outlet />
-      </main>
+      <div className="shell-workspace">
+        <TopNav />
+        <MobileNav />
+
+        <main className="shell-page">
+          <Outlet />
+        </main>
+      </div>
     </div>
   )
 }

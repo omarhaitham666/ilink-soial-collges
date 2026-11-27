@@ -1,19 +1,13 @@
-import { Outlet } from "react-router-dom";
-import ProfileHeader from "./components/profileHeader";
-import ProfileTabs from "./components/ProfileTabs";
+import { Outlet } from 'react-router-dom'
+import ProfileHeader from './components/profileHeader'
+import ProfileTabs from './components/ProfileTabs'
 
-const ProfilePage = () => {
+export default function ProfilePage() {
   return (
-   <>
-    <ProfileHeader />
-    <ProfileTabs />
-
-<main>
-  <Outlet />
-</main>
-
-    </>
+    <div className="il-profile-page">
+      <div className="il-profile-header"><ProfileHeader /></div>
+      <div className="il-profile-sections"><ProfileTabs /></div>
+      <div className="il-profile-content"><Outlet /></div>
+    </div>
   )
 }
-
-export default ProfilePage;
