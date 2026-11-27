@@ -110,23 +110,126 @@ function facePath(a: Curve, b: Curve) {
   return p
 }
 
-function bend(curve: Curve, seconds: number): Curve {
-  return curve.map(([x, y]) => {
-    const distance = Math.hypot(x - 219, y - 240)
-    const weight = Math.min(1, distance / 100)
-    const phase = x * 0.013 + y * 0.006
+// Two independent lengths of silk, pinned where their tips meet.
+// Neighboring sections share tension. The broad sections carry more motion.
+function createSilkDynamics() {
+  const count = 13
+  const makeStrip = () => ({
+    offset: new Float64Array(count),
+    speed: new Float64Array(count),
+    twist: new Float64Array(count),
+    spin: new Float64Array(count),
+  })
 
-    // Subtract the initial pose: at t = 0 the reference contours are exact.
-    const sway = Math.sin(seconds * 0.35 + phase) - Math.sin(phase)
-    const roll = Math.sin(seconds * 0.29 + phase * 1.6) - Math.sin(phase * 1.6)
+  const left = makeStrip()
+  const right = makeStrip()
+  const step = 1 / 120
+  let clock = 0
+  let remainder = 0
+  let lastTime = 0
 
-    return [x + sway * weight * 4.2, y + roll * weight * 5.5]
-  }) as unknown as Curve
+  function advanceStrip(strip: typeof left, phase: number) {
+    // Propagate forces first, then update positions together.
+    for (let i = 1; i < count; i++) {
+      const u = i / (count - 1)
+      const next = Math.min(i + 1, count - 1)
+
+      const wind =
+        Math.sin(clock * 0.48 - u * 4.1 + phase) +
+        0.24 * Math.sin(clock * 0.81 - u * 6.0 + phase * 1.7)
+
+      const roll =
+        Math.sin(clock * 0.43 - u * 5.2 + phase + 0.65)
+
+      const stretch =
+        strip.offset[i - 1] + strip.offset[next] - 2 * strip.offset[i]
+      const torsion =
+        strip.twist[i - 1] + strip.twist[next] - 2 * strip.twist[i]
+
+      const targetOffset = wind * u * 15
+      const targetTwist = roll * Math.sin(u * 1.75) * 0.32
+
+      strip.speed[i] += step * (
+        37 * stretch +
+        8.5 * (targetOffset - strip.offset[i]) -
+        4.8 * strip.speed[i]
+      )
+
+      strip.spin[i] += step * (
+        30 * torsion +
+        7 * (targetTwist - strip.twist[i]) -
+        4.3 * strip.spin[i]
+      )
+    }
+
+    for (let i = 1; i < count; i++) {
+      strip.offset[i] += strip.speed[i] * step
+      strip.twist[i] += strip.spin[i] * step
+    }
+  }
+
+  function advance(seconds: number) {
+    remainder += Math.min(0.08, Math.max(0, seconds - lastTime))
+    lastTime = seconds
+
+    while (remainder >= step) {
+      clock += step
+      advanceStrip(left, 0.20)
+      advanceStrip(right, 1.55)
+      remainder -= step
+    }
+  }
+
+  function sample(values: Float64Array, distance: number) {
+    const index = Math.min(1, Math.max(0, distance / 300)) * (count - 1)
+    const i = Math.floor(index)
+    return between(values[i], values[Math.min(count - 1, i + 1)], index - i)
+  }
+
+  function pose(point: Point): Point {
+    const [x, y] = point
+    const dx = x - 219
+    const dy = y - 240
+
+    // Axes of the reference ribbon, measured from the central tip.
+    const along = dx * 0.79 - dy * 0.613
+    const cross = dx * 0.613 + dy * 0.79
+    const strip = along < 0 ? left : right
+    const distance = Math.abs(along)
+
+    const sway = sample(strip.offset, distance)
+    const twist = sample(strip.twist, distance)
+
+    // Opposite edges move by different amounts as a broad fold rolls.
+    const normalShift = sway + cross * twist
+    const tangentShift = -cross * twist * 0.30
+
+    return [
+      x + normalShift * 0.613 + tangentShift * 0.79,
+      y + normalShift * 0.79 - tangentShift * 0.613,
+    ]
+  }
+
+  function bend(curve: Curve): Curve {
+    return [
+      pose(curve[0]), pose(curve[1]), pose(curve[2]), pose(curve[3]),
+      pose(curve[4]), pose(curve[5]), pose(curve[6]),
+    ]
+  }
+
+  function sheen(side: Face['side']) {
+    const strip = side === 'left' ? left : right
+    return sample(strip.twist, 160)
+  }
+
+  return { advance, bend, sheen }
 }
 
-function drawFace(ctx: CanvasRenderingContext2D, face: Face, seconds: number) {
-  const a = bend(face.outer, seconds)
-  const b = bend(face.inner, seconds)
+type SilkDynamics = ReturnType<typeof createSilkDynamics>
+
+function drawFace(ctx: CanvasRenderingContext2D, face: Face, seconds: number, dynamics: SilkDynamics) {
+  const a = dynamics.bend(face.outer)
+  const b = dynamics.bend(face.inner)
   const outline = facePath(a, b)
   const left = face.side === 'left'
 
@@ -156,7 +259,7 @@ function drawFace(ctx: CanvasRenderingContext2D, face: Face, seconds: number) {
   // Movement is deliberately slower than the cloth underneath.
   const phase = seconds * 0.23 + (left ? 0 : 1.4)
   const travel = Math.sin(phase)
-  const ridge = 0.64 + 0.095 * Math.sin(phase + 0.45)
+  const ridge = 0.62 + dynamics.sheen(face.side) * 0.48 + 0.035 * Math.sin(phase + 0.45)
 
   // Follow the individual face: the lower fold, upper fold and upright
   // corner each get their own local highlight instead of one screen-wide band.
@@ -234,6 +337,7 @@ function drawScene(
   width: number,
   height: number,
   seconds: number,
+  dynamics: SilkDynamics,
 ) {
   ctx.clearRect(0, 0, width, height)
   ctx.save()
@@ -257,7 +361,7 @@ function drawScene(
   ctx.fillRect(-20, -20, 40, 40)
   ctx.restore()
   for (const face of faces) {
-    drawFace(ctx, face, seconds)
+    drawFace(ctx, face, seconds, dynamics)
   }
 
   // A tapered filament joins the tips, with the brightest point at its center.
@@ -295,6 +399,7 @@ export default function SilkScene() {
     let frame = 0
     let previous = 0
     let elapsed = 0
+    const dynamics = createSilkDynamics()
     let inView = true
     let width = 1
     let height = 1
@@ -308,7 +413,8 @@ export default function SilkScene() {
           elapsed += Math.min((now - previous) / 1000, 0.08)
         }
         previous = now
-        drawScene(ctx, width, height, elapsed)
+        dynamics.advance(elapsed)
+        drawScene(ctx, width, height, elapsed, dynamics)
       }
 
       if (!reduce.matches) frame = requestAnimationFrame(render)
