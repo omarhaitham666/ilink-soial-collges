@@ -1,3 +1,6 @@
+import AuthLayout from './layouts/AuthLayout'
+import LoginPage from '../features/auth/LoginPage'
+import RegisterPage from '../features/auth/RegisterPage'
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import AppLayout from './layouts/AppLayout'
 import FeedPage from '../features/feed/FeedPage'
@@ -16,6 +19,13 @@ import Apperance from '../features/settings/pages/Appearance'
 import Support from '../features/settings/pages/Support'
 
 export const router = createBrowserRouter([
+  {
+    element: <AuthLayout />,
+    children: [
+      { path: '/login', element: <LoginPage /> },
+      { path: '/register', element: <RegisterPage /> },
+    ],
+  },
   {
     path: '/',
     element: <AppLayout />,
