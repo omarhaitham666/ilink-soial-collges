@@ -1,0 +1,41 @@
+.il-more-page {
+  width: min(100%, 38rem);
+  margin-inline: auto;
+  color: #f5effb;
+}
+.il-more-page h1 {
+  margin: 4px 0 18px;
+  font-size: 1.55rem;
+  line-height: 1.2;
+  font-weight: 700;
+}
+.il-more-page h2 {
+  margin: 18px 4px 7px;
+  color: #c2b4d0;
+  font-size: .83rem;
+  font-weight: 600;
+}
+.il-more-page ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+  border: 1px solid #302638;
+  border-radius: 14px;
+  background: #15111d;
+}
+.il-more-page li + li { border-top: 1px solid #292230; }
+.il-more-page a {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 12px;
+  min-height: 49px;
+  padding: 8px 14px;
+  color: inherit;
+  font-size: .94rem;
+  text-decoration: none;
+}
+.il-more-page a svg:first-child { color: #c69ee7; }
+.il-more-page a svg:last-child { color: #9f92ac; }
+.il-more-page a:is(:hover, :focus-visible) { background: #241b2d; }
