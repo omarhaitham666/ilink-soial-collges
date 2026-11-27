@@ -1,3 +1,4 @@
+import AuthSplash from '../../features/auth/splash/AuthSplash'
 import { Outlet } from 'react-router-dom'
 import SilkScene from '../../features/auth/components/SilkScene'
 import '../../features/auth/auth.css'
@@ -15,6 +16,7 @@ export default function AuthLayout() {
           </header>
 
           <Outlet />
+          <AuthSplash />
         </div>
       </section>
     </main>
