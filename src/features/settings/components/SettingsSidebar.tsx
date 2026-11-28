@@ -58,7 +58,7 @@ function SettingsSidebar() {
   ];
 
   return (
-    <aside className="group/sidebar  relative h-fit w-full shrink-0 overflow-hidden rounded-2xl border border-[#49305e] bg-[#12111b] shadow-[0_12px_40px_rgba(0,0,0,0.3)] transition-all duration-500 hover:border-[#79509c] hover:shadow-[0_15px_45px_rgba(168,85,247,0.10)] lg:sticky lg:top-24 lg:w-80">
+    <aside className="group/sidebar  relative h-fit w-full shrink-0 overflow-hidden rounded-2xl border border-[#49305e] bg-[#12111b] shadow-[0_12px_40px_rgba(0,0,0,0.3)] transition-all duration-500 hover:border-[#79509c] hover:shadow-[0_15px_45px_rgba(168,85,247,0.10)] lg:sticky lg:top-24 lg:w-80 hidden lg:block ">
 
       {/* Background Effects */}
       <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[#a855f7]/10 blur-[75px] transition-all duration-700 group-hover/sidebar:bg-[#a855f7]/20" />
