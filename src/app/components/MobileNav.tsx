@@ -1,5 +1,6 @@
+import SidebarEmblem from './brand/SidebarEmblem'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { Bell, ChevronLeft, Ellipsis, House, Link2, Plus, Search, UserRound } from 'lucide-react'
+import { Bell, ChevronLeft, Ellipsis, House, Plus, Search, UserRound } from 'lucide-react'
 import { ProfileBaseData } from '../../features/profile/data/profileData'
 import './mobile-navigation.css'
 
@@ -49,7 +50,7 @@ export default function MobileNav({
         ) : (
           <>
             <Link className="mobile-brand" to="/feed" aria-label="iLink home">
-              <Link2 size={22} strokeWidth={3} /> iLink
+              <SidebarEmblem placement="mobile" /> iLink
             </Link>
             <button className="mobile-icon" type="button" disabled
               aria-label="Notifications inbox unavailable">

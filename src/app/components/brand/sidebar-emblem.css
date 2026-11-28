@@ -48,3 +48,17 @@
   from { opacity: .08; }
   to { opacity: 1; }
 }
+.mobile-brand > .il-sidebar-emblem {
+  display: block;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  line-height: 0;
+}
+
+.mobile-brand > .il-sidebar-emblem > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: none;
+}
